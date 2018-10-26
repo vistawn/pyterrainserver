@@ -1,4 +1,4 @@
-tiles_dir = '/Users/jack/dev/opensource/pyterrainmaker/pyterrainmaker/tmp'
+tiles_dir = '/Users/jack/data/terrains'
 
 default_heightmap_layerinfo = {
   "tilejson": "2.1.0",

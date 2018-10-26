@@ -10,6 +10,7 @@ from flask import request
 from flask import Response
 from flask_cors import CORS
 import config
+import versions
 
 app = Flask(__name__)
 CORS(app)
@@ -55,12 +56,37 @@ def get_tile_infofile(tileset):
 def get_file(tileset, z, x, yfile):
     terrain_path = os.path.join(config.tiles_dir, tileset, z, x)
     terrain_file = os.path.join(terrain_path, yfile)
+
+    tile_version = request.args.get('v')
+    if tile_version is not None:
+        terrain_file = versions.get_versioned_terrain(tileset, tile_version, z, x, yfile)
+
     if os.path.exists(terrain_file):
         return serve_terrain_file(terrain_file)
-    else:
-        if int(z) == 0:
-            return serve_terrain_file(config.default_heightmap_tile)
-        abort(404)
+
+    if int(z) == 0:
+        return serve_terrain_file(config.default_heightmap_tile)
+    abort(404)
+
+
+@app.route('/tilesets/<tileset>/merge_tileset', methods=['POST'])
+def gen_merged_tileset(tileset):
+    merge_url = request.args.get('url')
+    max_level = request.args.get('max_level')
+    # write_to_config(tileset, merge_url, max_level)
+
+
+# def write_to_config(tileset, merge_url, max_level):
+    # config_path = os.path.join(config.tiles_dir, 'mergeconfig.json')
+    # if not os.path.exists(config_path):
+    #     with open(config_path, 'w') as f:
+    #         f.write('{}')
+    # with open(config_path, 'w') as f:
+    #     merge_config = json.load(f)
+    #     if merge_config.has_key(tileset):
+    #         tile_config = merge_config['tileset']
+    #         if tile_config.has_key()
+
 
 
 def serve_terrain_file(filepath):
@@ -75,6 +101,6 @@ def serve_terrain_file(filepath):
     return response
 
 
-# if __name__ == '__main__':
-#     app.run(host='0.0.0.0', port=5500, debug=True)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5500, debug=True)
 
