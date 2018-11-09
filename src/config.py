@@ -20,3 +20,4 @@ default_quantmesh_layerinfo = {
 
 
 default_heightmap_tile = 'blank.terrain'
+default_mesh_tile = 'blank_mesh.terrain'

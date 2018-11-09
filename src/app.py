@@ -65,7 +65,7 @@ def get_file(tileset, z, x, yfile):
         return serve_terrain_file(terrain_file)
 
     if int(z) == 0:
-        return serve_terrain_file(config.default_heightmap_tile)
+        return serve_terrain_file(config.default_mesh_tile)
     abort(404)
 
 
